@@ -133,7 +133,7 @@ A: Sized + ApplicationBase<gfx_device_gl::Resources, gfx_device_gl::CommandBuffe
         shade::Backend::GlslEs(shade_lang)
     } else {
         shade::Backend::Glsl(shade_lang)
-    }; 
+    };
     let mut app = A::new(&mut factory, backend, WindowTargets {
         color: main_color,
         depth: main_depth,
@@ -195,7 +195,7 @@ A: Sized + ApplicationBase<gfx_device_dx11::Resources, D3D11CommandBuffer>
     let main_depth = factory.create_depth_stencil_view_only(window.size.0, window.size.1)
                             .unwrap();
 
-    let backend = shade::Backend::Hlsl(device.get_shader_model()); 
+    let backend = shade::Backend::Hlsl(device.get_shader_model());
     let mut app = A::new(&mut factory, backend, WindowTargets {
         color: main_color,
         depth: main_depth,
@@ -266,7 +266,7 @@ A: Sized + ApplicationBase<gfx_device_metal::Resources, gfx_device_metal::Comman
     let (width, height) = window.get_inner_size_points().unwrap();
     let main_depth = factory.create_depth_stencil_view_only(width as Size, height as Size).unwrap();
 
-    let backend = shade::Backend::Msl(device.get_shader_model()); 
+    let backend = shade::Backend::Msl(device.get_shader_model());
     let mut app = A::new(&mut factory, backend, WindowTargets {
         color: main_color,
         depth: main_depth,
@@ -375,6 +375,7 @@ pub trait Application<R: gfx::Resources>: Sized {
     }
     #[cfg(all(target_os = "windows", not(feature = "vulkan")))]
     fn launch_default(wb: winit::WindowBuilder) where Self: Application<DefaultResources> {
+        println!("default: d3d11");
         launch_d3d11::<Wrap<_, _, Self>>(wb);
     }
     #[cfg(feature = "metal")]

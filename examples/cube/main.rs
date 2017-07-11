@@ -16,6 +16,7 @@ extern crate cgmath;
 #[macro_use]
 extern crate gfx;
 extern crate gfx_app;
+extern crate winit;
 
 pub use gfx_app::{ColorFormat, DepthFormat};
 
@@ -180,7 +181,8 @@ impl<R: gfx::Resources> gfx_app::Application<R> for App<R> {
 
 pub fn main() {
     use gfx_app::Application;
-    App::launch_simple("Cube example");
+    let wb = winit::WindowBuilder::new().with_title("Cube example");
+    App::launch_default(wb);
 }
 
 fn default_view() -> Matrix4<f32> {
