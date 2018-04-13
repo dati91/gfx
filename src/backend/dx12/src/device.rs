@@ -2214,7 +2214,9 @@ impl d::Device<B> for Device {
     {
         if let Some(mem) = memory.resource {
             let start = range.start().unwrap_or(&0);
+            println!("start={:?}", start);
             let end = range.end().unwrap_or(&memory.size);
+            println!("end={:?}", end);
             assert!(start <= end);
 
             let mut ptr = ptr::null_mut();

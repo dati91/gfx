@@ -397,13 +397,29 @@ fn main() {
     let image_upload_buffer = device.bind_buffer_memory(&image_upload_memory, 0, image_buffer_unbound).unwrap();
 
     // copy image data into staging buffer
+    let half_height = height / 2;
+    println!("height={:?} half_height={:?}", height, half_height);
+    let half_upload_size = upload_size / 2;
+    println!("upload_size={:?} half_upload_size={:?}", upload_size, half_upload_size);
     {
         let mut data = device
-            .acquire_mapping_writer::<u8>(&image_upload_memory, 0..upload_size)
+            .acquire_mapping_writer::<u8>(&image_upload_memory, 0..half_upload_size)
             .unwrap();
-        for y in 0 .. height as usize {
+        for y in 0 .. half_height as usize {
             let row = &(*img)[y*(width as usize)*image_stride .. (y+1)*(width as usize)*image_stride];
             let dest_base = y * row_pitch as usize;
+            data[dest_base .. dest_base + row.len()].copy_from_slice(row);
+        }
+        device.release_mapping_writer(data);
+    }
+
+    {
+        let mut data = device
+            .acquire_mapping_writer::<u8>(&image_upload_memory, half_upload_size..upload_size)
+            .unwrap();
+        for y in half_height as usize .. (height - 1) as usize {
+            let row = &(*img)[y*(width as usize)*image_stride .. (y+1)*(width as usize)*image_stride];
+            let dest_base = (y - half_height as usize) * row_pitch as usize;
             data[dest_base .. dest_base + row.len()].copy_from_slice(row);
         }
         device.release_mapping_writer(data);
