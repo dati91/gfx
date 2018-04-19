@@ -55,6 +55,17 @@ const COLOR_RANGE: i::SubresourceRange = i::SubresourceRange {
     layers: 0 .. 1,
 };
 
+const SUBPIXEL_DUAL_SOURCE: hal::pso::BlendState = hal::pso::BlendState::On {
+    color: hal::pso::BlendOp::Add {
+        src: hal::pso::Factor::One,
+        dst: hal::pso::Factor::OneMinusSrc1Color,
+    },
+    alpha: hal::pso::BlendOp::Add {
+        src: hal::pso::Factor::One,
+        dst: hal::pso::Factor::OneMinusSrc1Alpha,
+    },
+};
+
 #[cfg(any(feature = "vulkan", feature = "dx12", feature = "metal", feature = "gl"))]
 fn main() {
     env_logger::init();
@@ -127,7 +138,8 @@ fn main() {
     let limits = adapter
         .physical_device
         .limits();
-
+    println!("limits={:?}", limits);
+    println!("features={:?}", adapter.physical_device.features());
     // Build a new device and associated command queues
     let (device, mut queue_group) =
         adapter.open_with::<_, hal::Graphics>(1, |family| {
@@ -267,7 +279,7 @@ fn main() {
             );
             pipeline_desc.blender.targets.push(pso::ColorBlendDesc(
                 pso::ColorMask::ALL,
-                pso::BlendState::ALPHA,
+                SUBPIXEL_DUAL_SOURCE,
             ));
             pipeline_desc.vertex_buffers.push(pso::VertexBufferDesc {
                 stride: std::mem::size_of::<Vertex>() as u32,

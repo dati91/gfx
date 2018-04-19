@@ -350,7 +350,9 @@ impl hal::PhysicalDevice<Backend> for PhysicalDevice {
                 .collect::<Vec<_>>();
 
             // TODO: derive from `features`
-            let enabled_features = unsafe { mem::zeroed() };
+            //let enabled_features = unsafe { mem::zeroed() };
+            let mut enabled_features = vk::PhysicalDeviceFeatures::default();
+            enabled_features.dual_src_blend = vk::VK_TRUE;
             let info = vk::DeviceCreateInfo {
                 s_type: vk::StructureType::DeviceCreateInfo,
                 p_next: ptr::null(),
