@@ -44,11 +44,11 @@ mod result;
 mod window;
 
 const LAYERS: &'static [&'static str] = &[
-    #[cfg(debug_assertions)]
+    //#[cfg(debug_assertions)]
     "VK_LAYER_LUNARG_standard_validation",
 ];
 const EXTENSIONS: &'static [&'static str] = &[
-    #[cfg(debug_assertions)]
+    //#[cfg(debug_assertions)]
     "VK_EXT_debug_report",
 ];
 const DEVICE_EXTENSIONS: &'static [&'static str] = &[
@@ -61,9 +61,9 @@ const SURFACE_EXTENSIONS: &'static [&'static str] = &[
     vk::VK_KHR_XLIB_SURFACE_EXTENSION_NAME,
     vk::VK_KHR_XCB_SURFACE_EXTENSION_NAME,
     vk::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
-    vk::VK_KHR_MIR_SURFACE_EXTENSION_NAME,
+    /*vk::VK_KHR_MIR_SURFACE_EXTENSION_NAME,
     vk::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME,
-    vk::VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+    vk::VK_KHR_WIN32_SURFACE_EXTENSION_NAME,*/
 ];
 
 lazy_static! {
@@ -75,7 +75,7 @@ pub struct RawInstance(pub ash::Instance<V1_0>, Option<(ext::DebugReport, vk::De
 impl Drop for RawInstance {
     fn drop(&mut self) {
         unsafe {
-            #[cfg(debug_assertions)]
+            //#[cfg(debug_assertions)]
             {
                 if let Some((ref ext, callback)) = self.1 {
                     ext.destroy_debug_report_callback_ext(callback, None);
@@ -219,7 +219,7 @@ impl Instance {
             }.expect("Unable to create Vulkan instance")
         };
 
-        #[cfg(debug_assertions)]
+        //#[cfg(debug_assertions)]
         let debug_report = {
             let ext = ext::DebugReport::new(entry, &instance).unwrap();
             let info = vk::DebugReportCallbackCreateInfoEXT {
@@ -236,8 +236,8 @@ impl Instance {
             }.unwrap();
             Some((ext, handle))
         };
-        #[cfg(not(debug_assertions))]
-        let debug_report = None;
+        //#[cfg(not(debug_assertions))]
+        //let debug_report = None;
 
         Instance {
             raw: Arc::new(RawInstance(instance, debug_report)),

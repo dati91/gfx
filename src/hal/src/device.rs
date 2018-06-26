@@ -455,6 +455,7 @@ pub trait Device<B: Backend>: Any + Send + Sync {
         T: Copy,
     {
         let count = (range.end - range.start) as usize / mem::size_of::<T>();
+        println!("acquire_mapping_writer range={:?} mem_size={:?} count={:?}", range, mem::size_of::<T>(), count);
         self.map_memory(memory, range.clone())
             .map(|ptr| unsafe {
                 let start_ptr = ptr as *mut _;
@@ -469,6 +470,8 @@ pub trait Device<B: Backend>: Any + Send + Sync {
 
     /// Release a mapping Writer.
     fn release_mapping_writer<'a, T>(&self, mut writer: mapping::Writer<'a, B, T>) {
+        let count = (writer.range.end - writer.range.start) as usize / mem::size_of::<T>();
+        println!("release_mapping_writer range={:?} mem_size={:?} count={:?}", writer.range, mem::size_of::<T>(), count);
         writer.released = true;
         self.flush_mapped_memory_ranges(Some((writer.memory, writer.range.clone())));
         self.unmap_memory(writer.memory);
