@@ -232,7 +232,8 @@ impl Instance {
 
             let window: cocoa::base::id = msg_send![view, window];
             if !window.is_null() {
-                let scale_factor: CGFloat = msg_send![window, backingScaleFactor];
+                //let scale_factor: CGFloat = msg_send![window, backingScaleFactor];
+                let scale_factor: CGFloat = 1.0;
                 msg_send![layer, setContentsScale: scale_factor];
             }
             layer
