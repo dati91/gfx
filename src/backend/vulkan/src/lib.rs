@@ -53,7 +53,8 @@ mod result;
 mod window;
 
 const LAYERS: &'static [&'static str] = &[#[cfg(debug_assertions)]
-"VK_LAYER_LUNARG_standard_validation"];
+"VK_LAYER_LUNARG_standard_validation",
+"VK_LAYER_LUNARG_device_simulation"];
 const EXTENSIONS: &'static [&'static str] = &[#[cfg(debug_assertions)]
 "VK_EXT_debug_report"];
 const DEVICE_EXTENSIONS: &'static [&'static str] = &[vk::VK_KHR_SWAPCHAIN_EXTENSION_NAME];
