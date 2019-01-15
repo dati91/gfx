@@ -33,21 +33,9 @@ fn main() {
     let od = env::var("OUT_DIR").unwrap();
     let out_dir = Path::new(&od);
     let out_lib = out_dir.join("gfx_shaders.metallib");
-    let metallib = shader_dir.join("gfx_shaders.metallib");
-
-    let status = Command::new("cp")
-        .arg(metallib.as_os_str())
-        .arg(out_lib.as_os_str())
-        .status()
-        .expect("failed to execute metal compiler");
-
-    if !status.success() {
-        // stdout is linked to parent, so more detailed message will have been output from `metal`
-        panic!("metallib copy failed");
-    }
 
     // Find all .metal files _at the top level only_
-    /*let shader_files = fs::read_dir(&shader_dir)
+    let shader_files = fs::read_dir(&shader_dir)
         .expect("could not open shader directory")
         .filter_map(|entry| {
             let entry = entry.expect("error reading shader directory entry");
@@ -94,5 +82,5 @@ fn main() {
 
     if !status.success() {
         panic!("shader library build failed");
-    }*/
+    }
 }
